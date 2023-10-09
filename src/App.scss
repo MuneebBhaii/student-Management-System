@@ -2,8 +2,10 @@
 @import 'scss/bootstrap';
 // @import 'scss/auth';
 @import 'scss/sidebar';
+@import 'scss/dashboard';
 @import 'scss/students';
 @import 'scss/courses';
+@import "./scss/screenLoader";
 
 .loader-container{
     display: flex;

@@ -16,7 +16,7 @@ export default function Students() {
     const [courses, setCourses] = useState([])
     const [studentList, setStudentList] = useState([])
     const [studentCourse, setStudentCourse] = useState([])
-
+    const [edit, setEdit] = useState([])
     const getCourse = async () => {
         const querySnapshot = await getDocs(collection(firestore, "newcourses"));
         const courseArray = []
@@ -44,6 +44,13 @@ export default function Students() {
         getStudent()
         message.success("Todo deleted successfully")
     }
+    const editModal = async (studentId) => {
+        setIsModalOpen(true);
+        let editArray = []
+        let editstudent = await deleteDoc(doc(firestore, "students", studentId));
+        editArray.push(editstudent)
+        setEdit(editArray)
+    }
     const showModal = () => {
         setIsModalOpen(true);
         getCourse()
@@ -54,7 +61,7 @@ export default function Students() {
         let { name, studentId, number, email, address } = state
         const student = {
             name, studentId, number, email, studentCourse, address,
-            dateCreated: new Date().getTime(),
+            dateCreated: new Date().getFullYear(),
         }
         if (!name || !studentId || !number || !email || !studentCourse || !address) {
             message.error("Please fill all input field")
@@ -188,9 +195,10 @@ export default function Students() {
                 </div>
             </div>
 
+            <h2 className="text-center mt-3">Students Details</h2>
             {/* table */}
 
-            <div className="row mt-3">
+            <div className="row mt-2">
                 <div className="col">
                     <div className="table-responsive">
                         <table className="table table-striped">
@@ -223,7 +231,7 @@ export default function Students() {
                                                         onClick={() => { handleDelete(list.studentId) }}
                                                     /></Tooltip>
                                                     <Tooltip title="Edit"><Button type="primary" icon={<EditOutlined />}
-                                                    //    onClick={() => { navigate(`/dashboard/todos/${todo.id}`) }}
+                                                        onClick={() => { editModal(list.studentId) }}
                                                     /></Tooltip>
                                                 </Space>
                                             </td>
@@ -235,6 +243,107 @@ export default function Students() {
                     </div>
                 </div>
             </div>
+            <Modal title="Student data" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+                <Form layout="vertical"
+                    form={form}
+                >
+
+                    <Row gutter={16}>
+                        <Col span={12}>
+                            <Form.Item
+                                name="name"
+                                label="Name"
+                                rules={[
+                                    {
+                                        required: true,
+                                    },
+                                ]}
+                            >
+                                <Input name="name" placeholder="Please enter student name" onChange={handleChange} />
+                            </Form.Item>
+                        </Col>
+                        <Col span={12}>
+                            <Form.Item
+                                name="studentId"
+                                label="Student ID"
+                                rules={[
+                                    {
+                                        required: true,
+                                    },
+                                ]}
+                            >
+                                <Input name="studentId" placeholder="Please enter student id" onChange={handleChange} />
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    <Row gutter={16}>
+                        <Col span={12}>
+                            <Form.Item
+                                name="number"
+                                label="Number"
+                                rules={[
+                                    {
+                                        required: true,
+                                    },
+                                ]}
+                            >
+                                <Input name="number" className='w-100' placeholder="Please enter phone number" onChange={handleChange} />
+                            </Form.Item>
+                        </Col>
+                        <Col span={12}>
+                            <Form.Item
+                                name="email"
+                                label="Email"
+                                rules={[
+                                    {
+                                        required: true,
+                                    },
+                                ]}
+                            >
+                                <Input name="email" placeholder="Please enter email" onChange={handleChange} />
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    <Row gutter={16}>
+                        <Col span={24}>
+                            <Form.Item
+                                name="course"
+                                label="Course"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Please choose the type',
+                                    },
+                                ]}
+                            >
+                                <Select onChange={(value) => setStudentCourse(value)} placeholder="Please choose the course status">
+                                    {
+                                        courses.map((course, i) => {
+                                            return <Option value={course.name}>{course.name}</Option>
+                                        })
+                                    }
+                                </Select>
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    <Row gutter={16}>
+                        <Col span={24}>
+                            <Form.Item
+                                name="address"
+                                label="address"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'please enter address',
+                                    },
+                                ]}
+                            >
+                                <TextArea name="address" rows={4} placeholder="please enter address" onChange={handleChange} />
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                </Form>
+            </Modal>
         </>
     )
 }

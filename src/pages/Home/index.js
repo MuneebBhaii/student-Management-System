@@ -3,11 +3,12 @@ import {Col, Row} from 'antd';
 import {Route, Routes, } from 'react-router-dom';
 import { Content } from 'antd/es/layout/layout';
 // Components
-import Sider from '../Components/Sider';
-import Header from '../Components/Header';
+import Sider from '../../Components/Sider';
+import Header from '../../Components/Header';
 import Dashboard from '../Home/Dashboard'
 import Students from './Students';
 import Courses from './Courses';
+import Attendance from './Attendance';
 
 export default function Home() {
   return (
@@ -54,7 +55,7 @@ export default function Home() {
             <Route path='/' element={<Dashboard/>}/>
             <Route path='/students' element={<Students/>}/>
             <Route path='/course' element={<Courses/>}/>
-            
+            <Route path='/attendance' element={<Attendance/>}/>
           </Routes>
           </Content>
           </Row>

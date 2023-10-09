@@ -2,7 +2,7 @@
 import {  Menu,  Typography, } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { CalendarOutlined, DashboardOutlined,  ReadOutlined, UsergroupAddOutlined } from '@ant-design/icons';
-import logo  from '../../../assets/img/logo.png'
+import logo  from '../../assets/img/logo.png'
 export default function Sider() {
     const navigate = useNavigate();
     return (

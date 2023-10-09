@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "sticky-wall-92a0c"
-  }
+    "default": "fir-web-70b6f",
+    "yes": "fir-web-70b6f"
+  },
+  "targets": {},
+  "etags": {}
 }

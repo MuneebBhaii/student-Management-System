@@ -1,9 +1,9 @@
 import dayjs from 'dayjs'
-import { Button, Col, Drawer, Form, Input, Row, Space, Tooltip, message } from 'antd'
+import { Button, Col, Drawer, Form, Input, Modal, Row, Space, Tooltip, message } from 'antd'
 import { useForm } from 'antd/es/form/Form';
 import { firestore } from 'config/firebase';
 import { collection, deleteDoc, doc, getDocs, setDoc } from "firebase/firestore";
-import React, { useState ,useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons"
 
 
@@ -14,7 +14,7 @@ export default function Courses() {
     const [state, setState] = useState(initialState)
     const handleChange = e => setState(s => ({ ...s, [e.target.name]: e.target.value }))
     const [form] = useForm()
-    const [course , setCourse] = useState([])
+    const [course, setCourse] = useState([])
 
     const getCourse = async () => {
         const querySnapshot = await getDocs(collection(firestore, "newcourses"));
@@ -31,15 +31,20 @@ export default function Courses() {
     const handleDelete = async (id) => {
         await deleteDoc(doc(firestore, "newcourses", id));
         getCourse()
-        message.success("Todo deleted successfully")
+        message.success("coures deleted successfully")
     }
+
+     const handleEdit = (id)=>{
+        
+        message.success("courses updated successfully")
+     } 
 
     const uploadCourse = async (e) => {
         e.preventDefault()
         let { name, courseCode, description } = state
         const newcourse = {
             name, courseCode, description,
-            dateCreated: new Date().getTime(),
+            dateCreated: new Date().getFullYear(),
             id: Math.random().toString(26).slice(2)
         }
         try {
@@ -66,7 +71,7 @@ export default function Courses() {
                         Add New Course
                     </Button>
                 </div>
-                <Drawer
+                {/* <Drawer
                     title="Add a new course"
                     width={620}
                     onClose={onClose}
@@ -134,11 +139,67 @@ export default function Courses() {
                         </Row>
 
                     </Form>
-                </Drawer>
+                </Drawer> */}
+                <Modal title="Add a new course"
+                    open={open} onOk={uploadCourse} onCancel={onClose}>
+                    <Form layout="vertical"
+                        form={form}
+                    >
+                        <Row gutter={16}>
+                            <Col span={12}>
+                                <Form.Item
+                                    name="name"
+                                    label="Course Name"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: "enter course name",
+                                        },
+                                    ]}
+                                >
+                                    <Input name='name' placeholder="Please enter course name" onChange={handleChange} />
+                                </Form.Item>
+                            </Col>
+                            <Col span={12}>
+                                <Form.Item
+                                    name="courseCode"
+                                    label="Course Code"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: "enter course code",
+                                        },
+                                    ]}
+                                >
+                                    <Input name='courseCode' placeholder="Please enter course id" onChange={handleChange} />
+                                </Form.Item>
+                            </Col>
+                        </Row>
+                        <Row gutter={16}>
+                            <Col span={24}>
+                                <Form.Item
+                                    name="description"
+                                    label="Description"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: 'please enter course description',
+                                        },
+                                    ]}
+                                >
+                                    <TextArea name="description" rows={4} placeholder="please enter course description" onChange={handleChange} />
+                                </Form.Item>
+                            </Col>
+                        </Row>
+
+                    </Form>
+                </Modal>
             </div>
+
+            <h2 className="text-center mt-3">Courses Details</h2>
             {/* table */}
 
-            <div className="row mt-3">
+            <div className="row mt-2">
                 <div className="col">
                     <div className="table-responsive">
                         <table className="table table-striped">
@@ -168,6 +229,7 @@ export default function Courses() {
                                                     /></Tooltip>
                                                     <Tooltip title="Edit"><Button type="primary" icon={<EditOutlined />}
                                                     //    onClick={() => { navigate(`/dashboard/todos/${todo.id}`) }}
+                                                    onClick={()=>{handleEdit(list.id )}}
                                                     /></Tooltip>
                                                 </Space>
                                             </td>
