@@ -1,20 +1,22 @@
 import dayjs from 'dayjs'
-import { Button, Col, Drawer, Form, Input, Modal, Row, Space, Tooltip, message } from 'antd'
+import { Button, Col, Form, Input, Modal, Row, Space, Tooltip, message } from 'antd'
 import { useForm } from 'antd/es/form/Form';
 import { firestore } from 'config/firebase';
 import { collection, deleteDoc, doc, getDocs, setDoc } from "firebase/firestore";
 import React, { useState, useEffect } from 'react'
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons"
 
-
 const { TextArea } = Input;
 const initialState = { name: "", courseCode: "", description: "" }
 export default function Courses() {
     const [open, setOpen] = useState(false);
+    const [editModel, setEditModel] = useState(false);
     const [state, setState] = useState(initialState)
-    const handleChange = e => setState(s => ({ ...s, [e.target.name]: e.target.value }))
-    const [form] = useForm()
+    const [editCourse, setEditCourse] = useState({})
     const [course, setCourse] = useState([])
+    const [form] = useForm()
+    const handleChange = e => setState(s => ({ ...s, [e.target.name]: e.target.value }))
+    const handleEdit = e => setEditCourse(s => ({ ...s, [e.target.name]: e.target.value }))
 
     const getCourse = async () => {
         const querySnapshot = await getDocs(collection(firestore, "newcourses"));
@@ -34,10 +36,6 @@ export default function Courses() {
         message.success("coures deleted successfully")
     }
 
-     const handleEdit = (id)=>{
-        
-        message.success("courses updated successfully")
-     } 
 
     const uploadCourse = async (e) => {
         e.preventDefault()
@@ -55,6 +53,7 @@ export default function Courses() {
             message.error("try again ", e);
         }
         form.resetFields()
+        message.success("Successfully created new course")
         getCourse()
     }
     const showDrawer = () => {
@@ -63,6 +62,34 @@ export default function Courses() {
     const onClose = () => {
         setOpen(false);
     };
+
+    const editCourseModel = (id) => {
+        setEditModel(true);
+        let edit = course.find((coures) => coures.id === id)
+        setEditCourse(edit)
+    }
+
+    const updateCourse = async(e)=>{
+        e.preventDefault()
+        let { name, courseCode, description ,id } = editCourse
+        const newcourse = {
+            name, courseCode, description,id,
+            dateCreated: new Date().getFullYear(),
+        }
+        try {
+            await setDoc(doc(firestore, "newcourses", newcourse.id), newcourse);
+            onClose(false);
+        }
+        catch (e) {
+            message.error("try again ", e);
+        }
+        message.success("successfully edit course")
+        setEditModel(false)
+        getCourse()
+    }
+    const editClose = () => {
+        setEditModel(false);
+    }
     return (
         <>
             <div className='course-main'>
@@ -209,7 +236,7 @@ export default function Courses() {
                                     <th>Name</th>
                                     <th>Course Code</th>
                                     <th>Description</th>
-                                    <th>Date</th>
+                                    {/* <th>Date</th> */}
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -221,15 +248,15 @@ export default function Courses() {
                                             <td>{list.name}</td>
                                             <td>{list.courseCode}</td>
                                             <td>{list.description}</td>
-                                            <td>{list.dateCreated ? dayjs(list.dateCreated).format("dddd, DD/MM/YYYY") : ""}</td>
+                                            {/* <td>{list.dateCreated ? dayjs(list.dateCreated).format("dddd, DD/MM/YYYY") : ""}</td> */}
                                             <td>
                                                 <Space>
                                                     <Tooltip title="Delete" color='red'><Button danger icon={<DeleteOutlined />}
                                                         onClick={() => { handleDelete(list.id) }}
                                                     /></Tooltip>
                                                     <Tooltip title="Edit"><Button type="primary" icon={<EditOutlined />}
-                                                    //    onClick={() => { navigate(`/dashboard/todos/${todo.id}`) }}
-                                                    onClick={()=>{handleEdit(list.id )}}
+                                                        onClick={() => { editCourseModel(list.id) }}
+                                                    // onClick={()=>{handleEdit(list.id )}}
                                                     /></Tooltip>
                                                 </Space>
                                             </td>
@@ -241,6 +268,31 @@ export default function Courses() {
                     </div>
                 </div>
             </div>
+
+            <Modal title="Edit course"
+                open={editModel} onOk={updateCourse} onCancel={editClose}>
+                <Form layout="vertical"
+                    form={form}
+                >
+                    <Row gutter={16} className='my-3'>
+                        <Col span={12}>
+                            <label>Course Name</label>
+                            <Input name='name' placeholder="Please enter course name" value={editCourse.name} onChange={handleEdit} />
+                        </Col>
+                        <Col span={12}>
+                            <label>Course Code</label>
+                            <Input name='courseCode' placeholder="Please enter course id" value={editCourse.courseCode} onChange={handleEdit} />
+                        </Col>
+                    </Row>
+                    <Row gutter={16} className='mb-3'>
+                        <Col span={24}>
+                            <label>Description</label>
+                            <TextArea name="description" rows={4} placeholder="please enter course description" value={editCourse.description} onChange={handleEdit} />
+                        </Col>
+                    </Row>
+
+                </Form>
+            </Modal>
         </>
     )
 }

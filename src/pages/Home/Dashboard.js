@@ -6,8 +6,8 @@ import { firestore } from "config/firebase";
 import { BookOutlined, UsergroupAddOutlined } from '@ant-design/icons';
 import { Chart } from "react-google-charts";
 export default function Dashboard() {
-  const [studentList, setStudentList] = useState([])
-  const [course, setCourse] = useState([])
+  const [studentList, setStudentList] = useState([0])
+  const [course, setCourse] = useState([0])
   
   const getStudent = async () => {
     const querySnapshot = await getDocs(collection(firestore, "students"));
@@ -36,7 +36,7 @@ export default function Dashboard() {
 
   const data = [
     ["Year", "Students", "Courses"],
-    ["2022", 50, 3],
+    ["2022", 50, 4],
     ["2023", studentList, course],
     ["2024", 0 ,0],
     ["2025" , 0 ,0],
@@ -62,12 +62,12 @@ export default function Dashboard() {
           </div>
           <div className="courseNumber">
             <h2>Total Courses</h2>
-            <div className="counter m-0 h1">
+            <div className="counter h1">
               <BookOutlined /> <span>{course}</span>
             </div>
           </div>
         </div>
-        <div className="container w-lg-100 w-md-75 w-sm-50">
+        <div className="container mt-3">
           <Chart
             chartType="Bar"
             width="100%"

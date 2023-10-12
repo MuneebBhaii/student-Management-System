@@ -37,13 +37,12 @@ export default function Login() {
    
   };
   return (
-    <div className='auth-page'>
+    <div className='bg-dark'>
       <div className="auth-box col-4 rounded">
-      <Divider>WELCOME OUR SITE</Divider>
-      <h3 className='text-center'>Please Login</h3>
+      <h3 className='text-center text-white'>Login Admin</h3>
       <Form layout='vertical' form={form}>
 
-      <Form.Item 
+      <Form.Item className='text-white'
       label="Email"
       name="email"
       rules={[

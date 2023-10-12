@@ -1,25 +1,45 @@
 @import '../css-config/mixins.scss';
-.sidebar{
+
+.sidebar {
     background-color: rgb(15, 14, 14);
-    .ant-divider{
+    border-radius: '0 20px 20px 0';
+    // align-items: center;
+    // padding: 5px;
+    .ant-divider {
         display: none;
-        @include md{
+
+        @include md {
             color: white;
             display: block;
         }
     }
-    h5{
+
+    h5 {
         color: white;
     }
-    ul{
-       border-radius: 10px;
-        .ant-menu-title-content{
-    
+
+    ul {
+        border-radius: 10px;
+
+        .ant-menu-title-content {
+
             display: none;
-            @include md{
+
+            @include md {
                 display: inline-block;
-            
+
             }
         }
+    }
+}
+
+@media (max-width:767px) {
+    .sidebar {
+        border-radius: 0 0 20px 20px;
+    }
+}
+@media (min-width:768px) {
+    .sidebar {
+        border-radius: 0 20px 20px 0;
     }
 }

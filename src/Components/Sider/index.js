@@ -1,7 +1,7 @@
 
 import {  Menu,  Typography, } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import { CalendarOutlined, DashboardOutlined,  ReadOutlined, UsergroupAddOutlined } from '@ant-design/icons';
+import { BookOutlined, CalendarOutlined, DashboardOutlined, UsergroupAddOutlined } from '@ant-design/icons';
 import logo  from '../../assets/img/logo.png'
 export default function Sider() {
     const navigate = useNavigate();
@@ -11,10 +11,10 @@ export default function Sider() {
             <img src={logo} alt="logo" className='img-fuild rounded-circle mx-2' style={{width:'70px',}}/>
             </div>
             <Typography.Title level={5}>
-                Menu's
+                Menu
             </Typography.Title>
             
-            <Menu className='bg-light'
+            <Menu className='bg-light d-flex d-md-block'
                 onClick={({ key }) => {
                     navigate(key)
                 }}
@@ -36,7 +36,7 @@ export default function Sider() {
                     {
                         label: 'Course',
                         key: '/course',
-                        icon: <ReadOutlined />,
+                        icon: <BookOutlined />,
                     },
                     {
                         label: 'Attendance',

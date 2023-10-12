@@ -16,22 +16,15 @@ export default function Home() {
      <Row 
      style={{
       height:'100vh',
-      padding:20
+      // padding:20
     }}
      >
       {/* Sider */}
-      <Col span={4} className='sidebar'
-        style={{
-          borderRadius:'20px',
-          alignItems:'center',
-          padding:5,
-        
-        }}
-        >
+      <Col xl={4} md={4} sm={24} xs={24} className='sidebar'>
         <Sider/>
 
         </Col>
-        <Col span={20} className='bg-white px-2'>
+        <Col xl={20} lg={20} md={20} sm={24} className='bg-white px-2'>
           {/* Header */}
           <Row className='bg-white border-shadows' 
           style={{
@@ -41,7 +34,9 @@ export default function Home() {
             padding:10,
           }}
           >
+            {/* <Col xl={20} md={20} sm={24} xs={24}> */}
             <Header />
+            {/* </Col> */}
           </Row>
           <Row className='mt-2 border-shadows scroll-hide'
           style={{
