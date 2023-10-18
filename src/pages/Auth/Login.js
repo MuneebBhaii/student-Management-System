@@ -1,87 +1,67 @@
-import { Button, Col, Divider, Form, Input, Row, message } from 'antd'
-import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom';
-import {auth} from '../../config/firebase'
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom'
+import { signInWithEmailAndPassword} from "firebase/auth";
+import { auth } from '../../config/firebase';
+import { message } from 'antd';
+const initialization = { email: "", password: "" }
 export default function Login() {
-  const navigate = useNavigate()
-  const [form] = Form.useForm()
-  const [isProccessing, setIsProccessing] = useState(false)
-  const [values,setValue] = useState({
-    email: '',
-    password: '',
-  });
-  // Login
-  const hundleLogin = async () => {
-    try {
-      const values = await form.validateFields();
-      setIsProccessing(true)
-      const {email, password } = values
-      signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        setIsProccessing(false)
-        message.success("Login successfully")
-        navigate('/')
-      })
-      .catch((error) => {
-        setIsProccessing(false)
-        message.error(error.message)
-    // ..
-  });
-    } catch (errorInfo) {
-      message.error("Please fill up all fields.")
-      setIsProccessing(false)
-      return;
+    const [state, setState] = useState(initialization)
+    const nevigate = useNavigate()
+    const handleChange = e => {
+        setState({ ...state, [e.target.name]: e.target.value })
     }
-   
-  };
-  return (
-    <div className='bg-dark'>
-      <div className="auth-box col-4 rounded">
-      <h3 className='text-center text-white'>Login Admin</h3>
-      <Form layout='vertical' form={form}>
 
-      <Form.Item className='text-white'
-      label="Email"
-      name="email"
-      rules={[
-        {
-          required: true,
-          message: 'Please input your email',
-        },
-      ]}
-      
-      >
-      <Input placeholder="Enter your email" onChange={e=>setValue((prev)=>({...prev,email:e.target.value}))} />
-      </Form.Item>
-      <Col xs={24} lg={24}>
-      <Form.Item 
-      label="Password"
-      name="password"
-      rules={[
-        {
-          required: true,
-          message: 'Please input your password',
-        },
-      ]}
-      
-      >
-      <Input.Password placeholder="Enter password" onChange={e=>setValue((prev)=>({...prev,email:e.target.value}))} />
-      </Form.Item>
-      </Col>
-      <Row>
-        <Col xs={24} md={{ span: 12, offset: 6 }} lg={{ span: 8, offset: 8 }}>
-        <Form.Item>
-        <Button type="primary" htmlType='submit' className='w-100' loading={isProccessing} onClick={hundleLogin}>Login</Button>
-      </Form.Item>
-        </Col>
-      </Row>
-      </Form>
-      </div>
-      <div className="mt-2 col-4 border-1 border-secondary rounded" style={{borderStyle:'dashed'}}>
-        <Divider>New to our site? <Link to="/auth/reg">Create an account.</Link></Divider>
-      </div>
-    </div>
-  )
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        console.log(state)
+        const { email , password  } = state
+        signInWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                const user = userCredential.user;
+                message.success(" login successfully")
+                console.log(user)
+                nevigate("/")
+            })
+            .catch((error) => {
+                console.error(error)
+                message.error("You have no account")
+            });
+    }
+
+    return (
+        <main className='bg-secondary auth'>
+            <div className="container">
+                <div className="row">
+                    <div className="col-12 col-md-8 offset-md-2 col-lg-6 offset-lg-3">
+                        <div className="card p-2 p-md-4 p-lg-5">
+                            <h2 className="text-center mb-4">Login Form</h2>
+                            <form onSubmit={handleSubmit}>
+
+                                <div className="row mb-3">
+                                    <div className="col">
+                                        <input type="email" className="form-control" placeholder='Email' name='email' onChange={handleChange} />
+                                    </div>
+                                </div>
+                                <div className="row mb-3">
+                                    <div className="col">
+                                        <input type="password" className="form-control" placeholder='Password' name='password' onChange={handleChange} />
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="col">
+                                        <button className='btn btn-outline-success w-100'>Login</button>
+                                    </div>
+                                </div>
+                                <div className="row mt-2">
+                                    <div className="col text-center">
+                                        Create new account <Link to="/Auth/Register"><u className='text-dark fw-bold'>Register</u></Link>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    )
 }

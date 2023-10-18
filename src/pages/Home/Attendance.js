@@ -1,7 +1,7 @@
 import { Button, Select } from 'antd'
 import { firestore } from 'config/firebase';
 import dayjs from 'dayjs';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs } from 'firebase/firestore/lite';
 import React, { useEffect, useState } from 'react'
 const { Option } = Select;
 

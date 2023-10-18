@@ -2,7 +2,7 @@ import dayjs from 'dayjs'
 import { Button, Col, Form, Input, Modal, Row, Space, Tooltip, message } from 'antd'
 import { useForm } from 'antd/es/form/Form';
 import { firestore } from 'config/firebase';
-import { collection, deleteDoc, doc, getDocs, setDoc } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDocs, setDoc } from "firebase/firestore/lite";
 import React, { useState, useEffect } from 'react'
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons"
 

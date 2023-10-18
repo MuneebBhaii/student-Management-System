@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from 'react'
 import { Content } from 'antd/es/layout/layout';
-import { collection, getDocs, } from "firebase/firestore";
+import { collection, getDocs, } from "firebase/firestore/lite";
 import { firestore } from "config/firebase";
 import { BookOutlined, UsergroupAddOutlined } from '@ant-design/icons';
 import { Chart } from "react-google-charts";

@@ -48,9 +48,9 @@ export default function Home() {
           <Content>
           <Routes>
             <Route path='/' element={<Dashboard/>}/>
-            <Route path='/students' element={<Students/>}/>
-            <Route path='/course' element={<Courses/>}/>
-            <Route path='/attendance' element={<Attendance/>}/>
+            <Route path='students' element={<Students/>}/>
+            <Route path='course' element={<Courses/>}/>
+            <Route path='attendance' element={<Attendance/>}/>
           </Routes>
           </Content>
           </Row>

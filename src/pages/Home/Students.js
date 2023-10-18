@@ -1,4 +1,4 @@
-import { doc, setDoc, collection, getDocs, deleteDoc } from "firebase/firestore";
+import { doc, setDoc, collection, getDocs, deleteDoc } from "firebase/firestore/lite";
 import { Button, Row, Col, Form, Input, Modal, message, Select, Space, Tooltip } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { firestore } from "config/firebase";
@@ -39,6 +39,7 @@ export default function Students() {
 
     useEffect(() => {
         getStudent()
+        getCourse()
     }, [])
 
     const handleDelete = async (studentId) => {
@@ -74,9 +75,8 @@ export default function Students() {
         }
         form.resetFields()
         message.success("Successfully edited student")
+        setEditModalOpen(false);
         getStudent() 
-
-
     }
 
     const closeEdit = () => {
@@ -305,8 +305,8 @@ export default function Students() {
                     </Row>
                     <Row gutter={16}>
                         <Col span={24}>
-                            <label>Select Course</label>
-                            <Select onChange={(value) => setStudentCourse(value)} placeholder="Please choose the course status">
+                            <label className="mt-3">Select Course</label>
+                            <Select className="w-50 ms-3" onChange={(value) => setStudentCourse(value)} placeholder="Please choose the course status">
                                 {
                                     courses.map((course, i) => {
                                         return <Option value={course.name}>{course.name}</Option>
